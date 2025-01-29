@@ -1,11 +1,11 @@
-name: uc_deploy_SO
+name: uc_deploy_so
 
 on:
   push:
     branches:
       - main
     paths:
-    - databricks_terraform/worspaces/SO/**
+      - databricks_terraform/worspaces/SO/**
 
   pull_request:
     branches:
