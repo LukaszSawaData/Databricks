@@ -1,4 +1,4 @@
-name: uc_deploy_so
+name: uc_deploy_south
 on:
   push:
     branches:
