@@ -1,10 +1,11 @@
-name: uc_deploy_south
+name: uc_deploy_SO
+
 on:
   push:
     branches:
       - main
     paths:
-      - databricks_terraform/worspaces/SO/**
+    - databricks_terraform/workspaces/SO/**
 
   pull_request:
     branches:
@@ -17,9 +18,7 @@ on:
 jobs:
     terraform: 
         name: Terraform DataBricks Unity Catalog for SO
-        environment: 
-            name: SO
-        runs-on: ubuntu-latest ## self-hosted runner should be used
+        runs-on: self-hosted
         defaults:
             run:
                 shell: bash
@@ -52,12 +51,13 @@ jobs:
             - name: Plan Terraform
               id: plan
               run: | 
-                out = "$(terraform plan -no-color -parrarelism =5
+                out=$(terraform plan -no-color -parallelism=5)
                 echo "tf-plan<<EOF" >> "$GITHUB_OUTPUT"
                 echo "$(echo -n "$out" | tail -n 100)" >> "$GITHUB_OUTPUT"
                 echo "EOF" >> "$GITHUB_OUTPUT"
               continue-on-error: true
-            - uses: 
+            - name: Placeholder step
+              run: echo "This is a placeholder step"
             - name: Output Terraform fmt result
               run: echo "<h3>Terraform fmt result:</h3><pre>${{ steps.terraform-fmt.outputs.stdout }}</pre>" >> $GITHUB_STEP_SUMMARY
 
@@ -74,4 +74,3 @@ jobs:
             #- name: Verify IP
             #  run: |
             #    ALLOWED_IPS="
-
