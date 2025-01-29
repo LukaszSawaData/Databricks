@@ -1,10 +1,9 @@
-name: uc_deploy_NA
-
+name: uc_deploy_na
 on:
   push:
     branches:
       - main
-      paths:
+    paths:
       - databricks_terraform/worspaces/NA/**
 
 
