@@ -1,0 +1,37 @@
+catalogs:
+  - name: catalog_1
+    schemas:
+      - name: schema_1
+        principals:
+          - name: principal_1
+            privileges:
+              - SELECT
+              - INSERT
+          - name: principal_2
+            privileges:
+              - SELECT
+              - UPDATE
+      - name: schema_2
+        principals:
+          - name: principal_3
+            privileges:
+              - SELECT
+              - DELETE
+  - name: catalog_2
+    schemas:
+      - name: schema_3
+        principals:
+          - name: principal_4
+            privileges:
+              - SELECT
+              - INSERT
+          - name: principal_5
+            privileges:
+              - SELECT
+              - UPDATE
+      - name: schema_4
+        principals:
+          - name: principal_6
+            privileges:
+              - SELECT
+              - DELETE
