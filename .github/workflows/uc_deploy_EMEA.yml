@@ -1,5 +1,4 @@
-name: uc_deploy_EMEA
-
+name: uc_deploy_emea
 on:
   push:
     branches:
