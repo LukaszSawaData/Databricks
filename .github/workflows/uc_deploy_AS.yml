@@ -1,11 +1,11 @@
-name: Deploy Asia Pipeline
+name: uc_deploy_AS
 
 on:
   push:
     branches:
       - main
-      paths:
-      - databricks_terraform/worspaces/NA/**
+    paths:
+    - databricks_terraform/worspaces/NA/**
 
 
 
