@@ -1,5 +1,4 @@
 name: uc_deploy_so
-
 on:
   push:
     branches:
