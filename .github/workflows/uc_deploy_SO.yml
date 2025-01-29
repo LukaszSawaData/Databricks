@@ -1,4 +1,4 @@
-name: Duc_deploy_SO
+name: uc_deploy_SO
 
 on:
   push:
