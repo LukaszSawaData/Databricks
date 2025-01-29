@@ -1,4 +1,4 @@
-name: Deploy Unity Catalog
+name: Duc_deploy_SO
 
 on:
   push:

@@ -1,4 +1,4 @@
-name: Deploy Unity Catalog
+name: uc_deploy_NA
 
 on:
   push:
