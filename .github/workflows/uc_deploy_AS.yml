@@ -1,4 +1,4 @@
-name: Deploy Unity Catalog
+name: Deploy Asia Pipeline
 
 on:
   push:
