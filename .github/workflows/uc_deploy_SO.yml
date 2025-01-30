@@ -1,11 +1,11 @@
-name: uc_deploy_SO
+name: Duc_deploy_SO
 
 on:
   push:
     branches:
       - main
     paths:
-    - databricks_terraform/workspaces/SO/**
+    - databricks_terraform/worspaces/SO/**
 
   pull_request:
     branches:
@@ -15,10 +15,25 @@ on:
   
   workflow_dispatch:
 
+env: 
+
+  ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+  AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+  AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+  AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+  TF_CLIENT_ID: ${{ secrets.TF_CLIENT_ID }}
+  TF_CLIENT_SECRET: ${{ secrets.TF_CLIENT_SECRET }}
+  TF_LOGS: ${{ secrets.TF_LOGS }}
+  TF_TENANT_ID: ${{ secrets.TF_TENANT_ID }}
+  TF_WORKSPACE_URL: ${{ secrets.TF_WORKSPACE_URL }}
+
+
 jobs:
     terraform: 
         name: Terraform DataBricks Unity Catalog for SO
-        runs-on: self-hosted
+        environment: 
+            name: SO
+        runs-on: ubuntu-latest ## self-hosted runner should be used
         defaults:
             run:
                 shell: bash
@@ -51,13 +66,12 @@ jobs:
             - name: Plan Terraform
               id: plan
               run: | 
-                out=$(terraform plan -no-color -parallelism=5)
+                out = "$(terraform plan -no-color -parrarelism =5
                 echo "tf-plan<<EOF" >> "$GITHUB_OUTPUT"
                 echo "$(echo -n "$out" | tail -n 100)" >> "$GITHUB_OUTPUT"
                 echo "EOF" >> "$GITHUB_OUTPUT"
               continue-on-error: true
-            - name: Placeholder step
-              run: echo "This is a placeholder step"
+            - uses: 
             - name: Output Terraform fmt result
               run: echo "<h3>Terraform fmt result:</h3><pre>${{ steps.terraform-fmt.outputs.stdout }}</pre>" >> $GITHUB_STEP_SUMMARY
 
