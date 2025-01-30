@@ -12,3 +12,5 @@ unity_groups:
           service_principals: 
             - "service_principal_1"
             - "service_principal_2" 
+            - "service_principal_5" 
+
