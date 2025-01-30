@@ -1,0 +1,13 @@
+external_locations:
+  - name: "external_location_1"
+    url: "storage_account_name_1"
+    comment: "This is a comment"
+    grants:
+      - principal: "grantee_1"
+        priviliges: 
+          - READ
+          - BROWSE
+      - principal: "grantee_2"
+        priviliges: 
+          - READ
+          - BROWSE
