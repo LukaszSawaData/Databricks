@@ -9,7 +9,10 @@ on:
 
 
   pull_request:
-
+    branches:
+      - main
+    paths:
+      - databricks_terraform/worspaces/EMEA/**
 
 
 
