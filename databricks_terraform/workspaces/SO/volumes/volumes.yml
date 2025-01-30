@@ -1,0 +1,20 @@
+volumes:
+  - catalog_name: "catalog_dev"
+    schemas:
+      - name: "infrastructure"
+        volumes:
+          - name: "example_volume_1"
+            storage_location: "abfss:/mnt/example_volume_2"
+            owner: "oss_group_admin"
+            grants: 
+              - principal_name: "example_principal"
+                privileges:
+                -  "ALL_PRIVILIGES"
+      - name: "analytics"
+        volumes:
+          - name: "example_volume_3"
+          - name: "example_volume_4"
+    owner: "oss_group_admin"
+    principal:
+      name: "example_principal"
+      permission: "read"

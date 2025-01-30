@@ -15,6 +15,19 @@ on:
   
   workflow_dispatch:
 
+env: 
+
+  ARM_TENANT_ID: ${{ secrets.ARM_TENANT_ID }}
+  AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+  AZURE_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+  AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+  TF_CLIENT_ID: ${{ secrets.TF_CLIENT_ID }}
+  TF_CLIENT_SECRET: ${{ secrets.TF_CLIENT_SECRET }}
+  TF_LOGS: ${{ secrets.TF_LOGS }}
+  TF_TENANT_ID: ${{ secrets.TF_TENANT_ID }}
+  TF_WORKSPACE_URL: ${{ secrets.TF_WORKSPACE_URL }}
+
+
 jobs:
     terraform: 
         name: Terraform DataBricks Unity Catalog for SO
