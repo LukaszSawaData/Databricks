@@ -6,18 +6,11 @@ on:
     paths:
     - databricks_terraform/worspaces/EMEA/**
 
-
-
   pull_request:
     branches:
       - main
     paths:
       - databricks_terraform/worspaces/EMEA/**
-
-
-
-    branches:
-      - main
 
 jobs:
   deploy:
