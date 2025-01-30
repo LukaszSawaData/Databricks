@@ -1,0 +1,6 @@
+*.tfstate
+*.tfvars
+crash.log
+.terraformrc
+terraform.rc
+override.tf
