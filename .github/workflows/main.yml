@@ -2,74 +2,67 @@ name: uc_deploy_sot
 on:
   push:
     branches:
-    - main
+      - main
     paths:
-    - databricks_terraform/workspaces/SO/**
+      - 'databricks_terraform/workspaces/SO/**'
 
   pull_request:
     branches:
       - main
     paths:
-      - databricks_terraform/worspaces/SO/**
+      - 'databricks_terraform/workspaces/SO/**'
   
   workflow_dispatch:
 
 jobs:
-    terraform: 
-        name: Terraform DataBricks Unity Catalog for SO
-        runs-on: self-hosted
-        defaults:
-            run:
-                shell: bash
-                working-directory: ./databricks_terraform/worspaces/SO
-        steps:
-            - name: Checkout repository
-              uses: actions/checkout@v4
+  terraform: 
+    name: Terraform DataBricks Unity Catalog for SO
+    runs-on: self-hosted
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-            - name: Set up Terraform
-              uses: hashicorp/setup-terraform@v3
-              with:
-                terraform_version: 1.0.0
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.0.0
 
-            - name: check if terraform is installed
-              run: terraform --version
+      - name: Check Terraform version
+        run: terraform --version
               
-            - name: check ip
-              run: curl http://api.ipify.org
+      - name: Check IP
+        run: curl http://api.ipify.org
 
-            - name: Terraform fmt
-              run: terraform fmt -check
-              continue-on-error: true
+      - name: Terraform fmt
+        run: terraform fmt -check
+        continue-on-error: true
 
-            - name: Initialize Terraform
-              run: terraform init
+      - name: Initialize Terraform
+        run: terraform init
 
-            - name: Validate Terraform
-              run: terraform validate -no-color
+      - name: Validate Terraform
+        run: terraform validate -no-color
 
-            - name: Plan Terraform
-              id: plan
-              run: | 
-                out=$(terraform plan -no-color -parallelism=5)
-                echo "tf-plan<<EOF" >> "$GITHUB_OUTPUT"
-                echo "$(echo -n "$out" | tail -n 100)" >> "$GITHUB_OUTPUT"
-                echo "EOF" >> "$GITHUB_OUTPUT"
-              continue-on-error: true
-            - name: Placeholder step
-              run: echo "This is a placeholder step"
-            - name: Output Terraform fmt result
-              run: echo "<h3>Terraform fmt result:</h3><pre>${{ steps.terraform-fmt.outputs.stdout }}</pre>" >> $GITHUB_STEP_SUMMARY
+      - name: Plan Terraform
+        id: plan
+        run: | 
+          out=$(terraform plan -no-color -parallelism=5)
+          echo "tf-plan<<EOF" >> "$GITHUB_OUTPUT"
+          echo "$(echo -n "$out" | tail -n 100)" >> "$GITHUB_OUTPUT"
+          echo "EOF" >> "$GITHUB_OUTPUT"
+        continue-on-error: true
 
-            - name: Output Terraform init result
-              run: echo "<h3>Terraform init result:</h3><pre>${{ steps.terraform-init.outputs.stdout }}</pre>" >> $GITHUB_STEP_SUMMARY
-            - name: Output Terraform validate result
-              run: echo "<h3>Terraform validate result:</h3><pre>${{ steps.terraform-validate.outputs.stdout }}</pre>" >> $GITHUB_STEP_SUMMARY
-            - name: Output Terraform plan result
-              run: echo "<h3>Terraform plan result:</h3><pre>${{ steps.plan.outputs.tf-plan }}</pre>" >> $GITHUB_STEP_SUMMARY
-              #- name: Apply Terraform
-            #  #if: github.ref == 'refs/heads/main'
-            #  run: terraform apply -auto-approve tfplan
+      - name: Placeholder step
+        run: echo "This is a placeholder step"
 
-            #- name: Verify IP
-            #  run: |
-            #    ALLOWED_IPS="
+      - name: Output Terraform fmt result
+        run: echo "<h3>Terraform fmt result:</h3><pre>${{ steps.terraform-fmt.outputs.stdout }}</pre>" >> $GITHUB_STEP_SUMMARY
+
+      - name: Output Terraform init result
+        run: echo "<h3>Terraform init result:</h3><pre>${{ steps.terraform-init.outputs.stdout }}</pre>" >> $GITHUB_STEP_SUMMARY
+
+      - name: Output Terraform validate result
+        run: echo "<h3>Terraform validate result:</h3><pre>${{ steps.terraform-validate.outputs.stdout }}</pre>" >> $GITHUB_STEP_SUMMARY
+
+      - name: Output Terraform plan result
+        run: echo "<h3>Terraform plan result:</h3><pre>${{ steps.plan.outputs.tf-plan }}</pre>" >> $GITHUB_STEP_SUMMARY
