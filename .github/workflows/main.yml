@@ -17,7 +17,7 @@ on:
 jobs:
   terraform: 
     name: Terraform DataBricks Unity Catalog for SO
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
