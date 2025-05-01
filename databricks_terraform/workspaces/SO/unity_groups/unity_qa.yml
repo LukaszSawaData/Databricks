@@ -12,3 +12,14 @@ unity_groups:
           service_principals: 
             - "service_principal_1"
             - "service_principal_2" 
+      - name: "Unity_group_9_catalog.schema"
+        members: 
+          groups: 
+            - "member_1"
+            - "member_2"
+          users: 
+            - "user_1"
+            - "user_2"
+          service_principals: 
+            - "service_principal_1"
+            - "service_principal_2" 

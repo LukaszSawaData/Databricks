@@ -19,7 +19,8 @@ external_locations:
         priviliges: 
           - READ
           - BROWSE
-      - principal: "grantee_2"
+      - principal: "grantee_8"
         priviliges: 
           - READ
           - BROWSE
+
