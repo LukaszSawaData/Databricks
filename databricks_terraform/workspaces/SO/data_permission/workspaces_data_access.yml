@@ -35,21 +35,9 @@ catalogs:
             privileges:
               - SELECT
               - DELETE
-  - name: catalog_2
-    schemas:
-      - name: schema_3
+      - name: schema_6
         principals:
-          - name: principal_4
+          - name: principal_9
             privileges:
               - SELECT
-              - INSERT
-          - name: principal_5
-            privileges:
-              - SELECT
-              - UPDATE
-      - name: schema_4
-        principals:
-          - name: principal_6
-            privileges:
-              - SELECT
-              - DELETE    
+              - DELETE
