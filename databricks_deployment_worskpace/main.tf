@@ -16,15 +16,17 @@ terraform {
   }
 }
 
-provider "azurerm" { features {} }
+provider "azurerm" {
+  features {}
+}
 
-# ===== RG =====
+# ===== Resource Group =====
 resource "azurerm_resource_group" "rg" {
   name     = "first_rg"
   location = "westus"
 }
 
-# ===== VNet & Subnets =====
+# ===== Virtual Network =====
 resource "azurerm_virtual_network" "vnet" {
   name                = "first_vnet"
   address_space       = ["10.0.0.0/16"]
@@ -32,6 +34,7 @@ resource "azurerm_virtual_network" "vnet" {
   resource_group_name = azurerm_resource_group.rg.name
 }
 
+# ===== Subnets =====
 resource "azurerm_subnet" "public_subnet" {
   name                 = "public-subnet"
   resource_group_name  = azurerm_resource_group.rg.name
@@ -66,7 +69,7 @@ resource "azurerm_subnet" "private_subnet" {
   }
 }
 
-# ===== NSG =====
+# ===== Network Security Groups =====
 resource "azurerm_network_security_group" "public_nsg" {
   name                = "nsg-public-dbx"
   location            = azurerm_resource_group.rg.location
@@ -79,7 +82,7 @@ resource "azurerm_network_security_group" "private_nsg" {
   resource_group_name = azurerm_resource_group.rg.name
 }
 
-# Minimalne reguły (dopasuj do swojej polityki)
+# ===== Security Rules (basic outbound) =====
 resource "azurerm_network_security_rule" "allow_outbound_internet_public" {
   name                        = "allow-outbound-internet"
   priority                    = 100
@@ -108,7 +111,7 @@ resource "azurerm_network_security_rule" "allow_outbound_internet_private" {
   network_security_group_name = azurerm_network_security_group.private_nsg.name
 }
 
-# ===== NSG Associations (to ID tych zasobów oczekuje Databricks custom_parameters) =====
+# ===== NSG Associations =====
 resource "azurerm_subnet_network_security_group_association" "public_assoc" {
   subnet_id                 = azurerm_subnet.public_subnet.id
   network_security_group_id = azurerm_network_security_group.public_nsg.id
@@ -127,7 +130,7 @@ resource "azurerm_databricks_workspace" "dbw" {
   sku                          = "standard"
   managed_resource_group_name  = "managed-rg-databricks"
 
-  # (opcjonalnie) Bez publicznych IP dla klastrów
+  # Opcjonalnie można ograniczyć publiczny dostęp:
   # public_network_access_enabled = false
 
   custom_parameters {
@@ -136,12 +139,10 @@ resource "azurerm_databricks_workspace" "dbw" {
     public_subnet_name  = azurerm_subnet.public_subnet.name
     private_subnet_name = azurerm_subnet.private_subnet.name
 
-    # NOWE – wymagane przez provider:
     public_subnet_network_security_group_association_id  = azurerm_subnet_network_security_group_association.public_assoc.id
     private_subnet_network_security_group_association_id = azurerm_subnet_network_security_group_association.private_assoc.id
 
-    # (opcjonalnie) Wymuś brak publicznych IP na ws/clusterach:
-    # no_public_ip = true
+    # no_public_ip = true  # opcjonalnie
   }
 
   depends_on = [
