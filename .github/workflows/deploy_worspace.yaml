@@ -5,12 +5,12 @@ on:
     branches:
       - main
     paths:
-      - databricks_deployment_worskpace/**
+      - databricks_deployment_workspace/**
   pull_request:
     branches:
       - main
     paths:
-      -  databricks_deployment_worskpace/**
+      - databricks_deployment_workspace/**
   workflow_dispatch:
 
 env:
