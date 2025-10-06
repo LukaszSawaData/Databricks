@@ -25,6 +25,12 @@ resource "azurerm_resource_group" "rg" {
   location = "westus"
 }
 
+resource "azurerm_role_assignment" "spn_contributor" {
+  scope                = azurerm_resource_group.rg.id
+  role_definition_name = "Contributor"
+  principal_id         = "f64ef0d8-2d9d-4a19-a044-df1720449b3e"
+}
+
 resource "azurerm_virtual_network" "vnet" {
   name                = "first_vnet"
   address_space       = ["{vnet_address_space}"]
