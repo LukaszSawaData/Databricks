@@ -27,7 +27,7 @@ jobs:
   terraform:
     name: "Terraform Databricks Workspace"
     environment: prod
-    runs-on: [self-hosted, linux, cicdframework]
+    runs-on: ubuntu-latest
     defaults:
       run:
         shell: bash
