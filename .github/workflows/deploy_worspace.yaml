@@ -4,13 +4,9 @@ on:
   push:
     branches:
       - main
-    paths:
-      - databricks_deployment_workspace/**
   pull_request:
     branches:
       - main
-    paths:
-      - databricks_deployment_workspace/**
   workflow_dispatch:
 
 env:
@@ -68,7 +64,7 @@ jobs:
       - name: Terraform Plan
         id: plan
         run: |
-          out="$(terraform plan -no-color)"
+          out="$(terraform plan -no-color -lock=false)"
           echo "tf-plan<<EOF" >> "$GITHUB_OUTPUT"
           echo "$(echo -n "$out" | tail -n 100)" >> "$GITHUB_OUTPUT"
           echo "EOF" >> "$GITHUB_OUTPUT"

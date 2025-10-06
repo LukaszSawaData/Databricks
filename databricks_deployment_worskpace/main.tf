@@ -12,7 +12,7 @@ terraform {
     storage_account_name  = "storageforterraformls"
     container_name        = "state"
     key                   = "tfstate/terraform.tfstate"
-   use_azuread_auth     = true
+    use_azuread_auth     = true
   }
 }
 
@@ -33,18 +33,11 @@ resource "azurerm_virtual_network" "vnet" {
   resource_group_name = azurerm_resource_group.rg.name
 }
 
-resource "azurerm_subnet" "public_subnet" {
-  name                 = "public-subnet"
+resource "azurerm_subnet" "subnet" {
+  name                 = "subnet1"
   resource_group_name  = azurerm_resource_group.rg.name
   virtual_network_name = azurerm_virtual_network.vnet.name
-  address_prefixes     = ["10.0.0.0/25"]
-}
-
-resource "azurerm_subnet" "private_subnet" {
-  name                 = "private-subnet"
-  resource_group_name  = azurerm_resource_group.rg.name
-  virtual_network_name = azurerm_virtual_network.vnet.name
-  address_prefixes     = ["10.0.0.128/25"]
+  address_prefixes     =["10.0.0.0/24"]
 }
 
 resource "azurerm_databricks_workspace" "dbw" {
