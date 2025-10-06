@@ -81,7 +81,7 @@ jobs:
           VALIDATE: "terraform\n${{ steps.validate.outputs.stdout }}"
         with:
           script: |
-            const output = `## Changes
+const output = `## Changes
 
 **Target Env**: \`Prod\`
 
@@ -91,7 +91,7 @@ jobs:
 
 <details><summary>Validation Output</summary>
 
-\`\`\`\n
+\`\`\`
 ${ process.env.VALIDATE }
 \`\`\`
 
@@ -103,13 +103,14 @@ ${ process.env.VALIDATE }
 
 <details><summary>Show Plan</summary>
 
-\`\`\`\n
+\`\`\`
 ${ process.env.PLAN }
 \`\`\`
 
 </details>
 
-**Pusher:** @${{ github.actor }}, **Action:** \`${{ github.event_name }}\`, **Workflow:** \`${{ github.workflow }}\``
+**Pusher:** @${{ github.actor }}, **Action:** \`${{ github.event_name }}\`, **Workflow:** \`${{ github.workflow }}\`
+`
 
             github.rest.issues.createComment({
               issue_number: context.issue.number,
