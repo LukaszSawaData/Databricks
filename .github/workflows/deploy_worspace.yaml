@@ -1,0 +1,127 @@
+name: "Databricks Terraform Workspace"
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - databricks_deployment_worskpace/**
+  pull_request:
+    branches:
+      - main
+    paths:
+      -  databricks_deployment_worskpace/**
+  workflow_dispatch:
+
+env:
+  TF_LOG: INFO
+  TF_VAR_client_id: ${{ secrets.CLIENT_ID }}
+  TF_VAR_client_secret: ${{ secrets.CLIENT_SECRET }}
+  TF_VAR_tenant_id: ${{ secrets.TENANT_ID }}
+  ARM_CLIENT_ID: ${{ secrets.CLIENT_ID }}
+  ARM_CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+  ARM_SUBSCRIPTION_ID: ${{ secrets.SUBSCRIPTION_ID }}
+  ARM_TENANT_ID: ${{ secrets.TENANT_ID }}
+
+jobs:
+  terraform:
+    name: "Terraform Databricks Workspace"
+    environment: prod
+    runs-on: [self-hosted, linux, cicdframework]
+    defaults:
+      run:
+        shell: bash
+        working-directory: ./databricks_deployment_worskpace/
+
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v4
+
+      - name: Check IP of Runner
+        run: curl https://api.ipify.org
+
+      - name: Setup Terraform with specified version on the runner
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.10.5
+          terraform_wrapper: false
+
+      - name: Terraform fmt
+        id: fmt
+        run: terraform fmt -check
+        continue-on-error: true
+
+      - name: Terraform Init
+        id: init
+        run: terraform init
+        env:
+          ARM_USE_AZUREAD: "true"
+
+      - name: Terraform Validate
+        id: validate
+        run: terraform validate -no-color
+
+      - name: Terraform Plan
+        id: plan
+        run: |
+          out="$(terraform plan -no-color)"
+          echo "tf-plan<<EOF" >> "$GITHUB_OUTPUT"
+          echo "$(echo -n "$out" | tail -n 100)" >> "$GITHUB_OUTPUT"
+          echo "EOF" >> "$GITHUB_OUTPUT"
+        continue-on-error: true
+
+      - uses: actions/github-script@v7
+        if: github.event_name == 'pull_request'
+        env:
+          PLAN: "terraform\n${{ steps.plan.outputs.tf-plan }}"
+          VALIDATE: "terraform\n${{ steps.validate.outputs.stdout }}"
+        with:
+          script: |
+            const output = `## Changes
+
+**Target Env**: \`Prod\`
+
+### Terraform Format and Style: \`${{ steps.fmt.outcome }}\`
+### Terraform Initialization: \`${{ steps.init.outcome }}\`
+### Terraform Validation: \`${{ steps.validate.outcome }}\`
+
+<details><summary>Validation Output</summary>
+
+\`\`\`\n
+${ process.env.VALIDATE }
+\`\`\`
+
+</details>
+
+### Terraform Plan: \`${{ steps.plan.outcome }}\`
+
+**Refer to the workflow details for the complete plan. Result are truncated.**
+
+<details><summary>Show Plan</summary>
+
+\`\`\`\n
+${ process.env.PLAN }
+\`\`\`
+
+</details>
+
+**Pusher:** @${{ github.actor }}, **Action:** \`${{ github.event_name }}\`, **Workflow:** \`${{ github.workflow }}\``
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            })
+
+      - name: Terraform Plan Status
+        if: steps.plan.outcome == 'failure'
+        run: exit 1
+
+      - name: Terraform Apply
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: terraform apply -auto-approve -input=false
