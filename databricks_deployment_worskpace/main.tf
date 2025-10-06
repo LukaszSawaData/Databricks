@@ -28,16 +28,23 @@ resource "azurerm_resource_group" "rg" {
 
 resource "azurerm_virtual_network" "vnet" {
   name                = "first_vnet"
-  address_space       = ["{vnet_address_space}"]
+  address_space       = ["10.0.0.0/24"]
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
 }
 
-resource "azurerm_subnet" "subnet" {
-  name                 = "{subnet_name}"
+resource "azurerm_subnet" "public_subnet" {
+  name                 = "public-subnet"
   resource_group_name  = azurerm_resource_group.rg.name
   virtual_network_name = azurerm_virtual_network.vnet.name
-  address_prefixes     = ["{subnet_address_space}"]
+  address_prefixes     = ["10.0.0.0/25"]
+}
+
+resource "azurerm_subnet" "private_subnet" {
+  name                 = "private-subnet"
+  resource_group_name  = azurerm_resource_group.rg.name
+  virtual_network_name = azurerm_virtual_network.vnet.name
+  address_prefixes     = ["10.0.0.128/25"]
 }
 
 resource "azurerm_databricks_workspace" "dbw" {
@@ -47,7 +54,8 @@ resource "azurerm_databricks_workspace" "dbw" {
   sku                         = "standard"
   managed_resource_group_name  = "managed-rg-databricks"
   custom_parameters {
-    virtual_network_id = azurerm_virtual_network.vnet.id
-    public_subnet_name = azurerm_subnet.subnet.name
+    virtual_network_id    = azurerm_virtual_network.vnet.id
+    public_subnet_name    = azurerm_subnet.public_subnet.name
+    private_subnet_name   = azurerm_subnet.private_subnet.name
   }
 }
