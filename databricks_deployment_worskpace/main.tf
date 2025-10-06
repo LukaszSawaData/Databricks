@@ -47,7 +47,8 @@ resource "azurerm_databricks_workspace" "dbw" {
   sku                         = "standard"
   managed_resource_group_name  = "managed-rg-databricks"
   custom_parameters {
-    virtual_network_id = azurerm_virtual_network.vnet.id
-    public_subnet_name = azurerm_subnet.subnet.name
+    virtual_network_id    = azurerm_virtual_network.vnet.id
+    public_subnet_name    = azurerm_subnet.public_subnet.name
+    private_subnet_name   = azurerm_subnet.private_subnet.name
   }
 }
