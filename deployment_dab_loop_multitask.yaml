@@ -1,0 +1,97 @@
+resources:
+  jobs:
+    nazwa_pipelionu:
+      name: "nazwa_pipelionu"
+
+      schedule:
+        quartz_cron_expression: "0 0 0 ? * MON-FRI"
+        timezone_id: Europe/Amsterdam
+        pause_status: "${var.job_status}"
+
+      tags:
+        pipeline: nazwa_pipelionu
+
+      tasks:
+        - task_key: configure_task
+          job_cluster_key: job_cluster
+          python_wheel_task:
+            package_name: pg_cdp
+            entry_point: get_configured_tables
+            parameters:
+              - tables_daily
+
+        - task_key: bronze_read_task
+          depends_on:
+            - task_key: configure_task
+          job_cluster_key: job_cluster
+          python_wheel_task:
+            package_name: etl
+            entry_point: bronze_read
+          libraries:
+            - whl: ../dist/*.whl
+        - task_key: silver_transformation_task
+          depends_on:
+            - task_key: bronze_read_task
+          job_cluster_key: job_cluster
+          python_wheel_task:
+            package_name: etl
+            entry_point: silver_transformation
+          libraries:
+            - whl: ../dist/*.whl
+
+      job_clusters:
+        - job_cluster_key: job_cluster
+          new_cluster:
+            spark_version: 15.4.x-cpu-ml-scala2.12
+            node_type_id: Standard_F4
+            data_security_mode: SINGLE_USER
+            spark_env_vars:
+              PIP_EXTRA_INDEX_URL: "KV"
+              ENVIRONMENT: ${bundle.target}
+            autoscale:
+              min_workers: 1
+              max_workers: 1
+            custom_tags:
+              pipeline: nazwa_pipelionu
+              region: global
+              medallionlevel: bronzes
+
+    parent:
+      name: "nazwa_pipelionu_parent"
+
+      tags:
+        pipeline: nazwa_pipelionu
+
+      tasks:
+        - task_key: get_configuration
+          job_cluster_key: job_cluster
+          python_wheel_task:
+            package_name: pck_name
+            entry_point: read_yaml_config
+          libraries:
+            - whl: ../dist/*.whl
+
+        - task_key: run_nazwa_pipelionu_foreach
+          depends_on:
+            - task_key: get_configuration
+          for_each_task:
+            inputs: "{{tasks.get_configuration.values.output}}"
+            task:
+              task_key: run_nazwa_pipelionu_item
+              run_job_task:
+                job_id: ${resources.jobs.nazwa_pipelionu.id}
+                job_parameters:
+                  config_item: "{{input}}"
+
+      job_clusters:
+        - job_cluster_key: job_cluster
+          new_cluster:
+            spark_version: 15.4.x-cpu-ml-scala2.12
+            node_type_id: Standard_F4
+            data_security_mode: SINGLE_USER
+            spark_env_vars:
+              PIP_EXTRA_INDEX_URL: "KV"
+              ENVIRONMENT: ${bundle.target}
+            autoscale:
+              min_workers: 1
+              max_workers: 1
