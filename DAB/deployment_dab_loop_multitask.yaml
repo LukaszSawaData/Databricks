@@ -1,3 +1,4 @@
+#parent job, passing paramenteres, to child 
 resources:
   jobs:
     nazwa_pipelionu:
