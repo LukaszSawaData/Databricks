@@ -1,2 +1,4 @@
 1: Run databricks pipeline by poetry: 
 DATABRICKS_CONFIG_PROFILE=dev poetry run python -m <entry-point>     --env dev     --param parameter1     --parementr2 param2
+
+DATABRICKS_CONFIG_PROFILE=dev poetry run python -m suppliers.jobs.silver.main     --env dev     --supplier nitto     --table rfid
