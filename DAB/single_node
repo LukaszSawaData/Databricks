@@ -1,0 +1,16 @@
+job_cluster_key: job_cluster
+          new_cluster:
+            kind: CLASSIC_PREVIEW
+            is_single_node: true
+            spark_version: 15.4.x-scala2.12
+            # Looking for a different node type?
+            # try
+            # az vm list-sizes --location eastus2 --output table
+            node_type_id: Standard_D4as_v5
+            data_security_mode: SINGLE_USER
+            num_workers: 1
+            runtime_engine: STANDARD
+            spark_conf:
+              spark.rpc.message.maxSize: "512"
+              spark.databricks.cluster.profile": "singleNode"
+              spark.master": "local[*, 4]"
