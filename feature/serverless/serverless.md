@@ -1,14 +1,19 @@
 # Description
 
 
+# Requirements 
 
-
+-  Unity Catalog enabled
+-  Because serverless compute for workflows uses standard access mode, your workloads must support this access mode.
+-  Databricks workspace must be in a supported region for serverless compute
 # Glowne cechy: 
 
 
-|Feature| Description
-Automatic Scaling| 
-Speed
+|Feature| Description|
+|Automatic Scaling| 
+|Photon|
+| Databricks Runtime|Databricks automatically upgrades 
+
 
 # Serverless SQL Warehouses
  
@@ -20,8 +25,15 @@ Speed
 - Allocate resources just for the duration of the task and shut down automatically when the job completes
 
 
-## Serverless Jobs: 
-- 
+## Serverless
+
+
+
+# Where use Severless
+## Notebook
+## Lakeflow
+## Jobs
+Serverless compute is supported with the notebook,** Python script**, **dbt, Python wheel, and JAR task types**
 
 
 # Use Cases
@@ -31,8 +43,8 @@ Serverless SQL Warehouses:
 
 
 # Costs 
-
-
+## Budget Policy
+- Jak ustawic Budget policy ??? Dopytac o to 
 
 # Network
 - NCC ensures private, managed connectivity between Databricks Serverless compute and your data sources, such as Azure Data Lake Storage
@@ -47,11 +59,19 @@ Serverless SQL Warehouses:
 
 
 
-
+# Works with SDK
 
 # Managing Dependancies 
 - There is no Init script
 - Notebook-Scoped Libraries: %pip
+
+# Switch existing job to Serverless
+- UI
+- DAB
+
+## Moving cluster tag to job tag: 
+
+<img width="458" height="211" alt="image" src="https://github.com/user-attachments/assets/1085ca9d-6405-4a54-802a-c8084f224229" />
 
 
 
