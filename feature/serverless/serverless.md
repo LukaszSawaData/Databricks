@@ -1,5 +1,5 @@
 # Description
-
+Databricks Serverless Compute is a fully managed compute option that allows users to process data without worrying about provisioning or maintaining underlying infrastructure. Instead of managing clusters, users can focus entirely on developing data pipelines, running analytics, and leveraging machine learning workflows. Serverless Compute dynamically allocates resources based on workload demands, ensuring efficient use of compute resources while minimizing idle costs.
 
 # Requirements 
 
@@ -13,6 +13,11 @@
 |Automatic Scaling| 
 |Photon|
 | Databricks Runtime|Databricks automatically upgrades 
+|Auto-optimization |
+
+# Auto Optimisation: 
+Serverless compute for workflows auto-optimization automatically optimizes the compute used to run your jobs and retries failed tasks. Auto-optimization is enabled by default, and Databricks recommends leaving it enabled to ensure critical workloads run successfully at least once. However, if you have workloads that must be executed at most once, for example, jobs that are not idempotent, you can turn off auto-optimization when adding or editing a task
+<img width="646" height="246" alt="image" src="https://github.com/user-attachments/assets/c37334bb-9c88-432a-979b-6ab2063e72bf" />
 
 
 # Serverless SQL Warehouses
@@ -26,7 +31,7 @@
 
 
 ## Serverless
-
+- wyjasnic to: https://learn.microsoft.com/en-us/azure/databricks/jobs/run-serverless-jobs#performance
 
 
 # Where use Severless
@@ -82,3 +87,12 @@ Serverless SQL Warehouses:
 -  Because serverless compute does not support JAR file installation, you cannot use a JDBC or ODBC driver to ingest data from an external data source.
 ## Higher Costs for Continuous Workloads
 - For always-on tasks, provisioned clusters might be more cost-effective.
+## Spark configuration parameters at the session level
+[Spark configuration parameters at the session level](https://learn.microsoft.com/en-us/azure/databricks/jobs/run-serverless-jobs#set-spark-config)
+
+
+# Support third party tools
+## ADF
+<img width="627" height="544" alt="image" src="https://github.com/user-attachments/assets/dfe9fe5b-8c31-4a4c-8083-252221afddf1" />
+
+
