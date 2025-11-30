@@ -7,7 +7,7 @@ For example, imagine you’re running an ETL pipeline to predict the latest tren
 Under the hood, serverless compute uses Lakeguard to isolate user code using sandboxing techniques, an absolute necessity in a serverless environment.
 
 <img width="456" height="304" alt="image" src="https://github.com/user-attachments/assets/65a29e9b-0b34-4033-823a-cf6db44717ee" />
-
+https://bitpeak.com/compute-approaches-in-databricks/?utm_source=chatgpt.com
 
 # Requirements 
 
@@ -62,8 +62,8 @@ https://learn.microsoft.com/en-us/azure/databricks/ldp/serverless#policy
 # Network
 - NCC ensures private, managed connectivity between Databricks Serverless compute and your data sources, such as Azure Data Lake Storage
 - Azure Private Link: This ensures that all communication between Serverless compute and your Azure resources happens securely, without exposing traffic to the public internet.
-
-
+https://docs.databricks.com/aws/en/admin/system-tables/billing
+spark.databricks.execution.timeout - kontrola wydatkow.
 Data quality monitoring and predictive optimization are also billed under the serverless jobs SKU.
 
 Serverless compute does not have to be enabled to use these two features.
@@ -111,6 +111,6 @@ You cannot manually add compute settings in a clusters object in the JSON config
 
 
 
-
+https://docs.databricks.com/aws/en/admin/system-tables/serverless-billing
 
 https://medium.com/sync-computing/top-9-lessons-learned-about-databricks-jobs-serverless-41a43e99ded5
